@@ -1,0 +1,124 @@
+<form [formGroup]="recipeForm" (ngSubmit)="submit()" style="margin-bottom: 10px;">
+  <div class="row">
+    <div class="col-xs-12">
+      <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
+      &nbsp;
+      <button type="button" class="btn btn-primary" (click)="onClear()">Clear</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label for="name">
+          Name
+        </label>
+        <input type="text" class="form-control" id="name" name="name" formControlName="name">
+        <!-- Error Message -->
+        <div class="error"
+          *ngIf="recipeForm.controls.name.errors?.required && (recipeForm.controls.name.touched || recipeForm.controls.name.dirty)">
+          This field is required
+        </div>
+        <div class="error"
+          *ngIf="recipeForm.controls.name.errors?.minlength && (recipeForm.controls.name.touched || recipeForm.controls.name.dirty)">
+          Name must be at least 5 characters long.
+        </div>
+        <div class="error"
+          *ngIf="recipeForm.controls.name.errors?.pattern && (recipeForm.controls.name.touched || recipeForm.controls.name.dirty)">
+          Only letters are allowed
+        </div>
+        <!-- Error Message -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label for="name">
+          Image
+        </label>
+        <input type="text" class="form-control" id="image" name="imagePath" formControlName="imagePath" #imagePath>
+        <!-- Error Message -->
+        <div class="error"
+          *ngIf="recipeForm.controls.imagePath.errors?.required && (recipeForm.controls.imagePath.touched || recipeForm.controls.imagePath.dirty)">
+          This field is required
+        </div>
+        <!-- Error Message -->
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <img [src]="imagePath.value" class="img-responsive" [ngClass]="{ 'csutomCssProperty': imagePath.value}">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+        <label for="description">
+          Description
+        </label>
+        <textarea class="form-control" name="description" id="description" rows="3" formControlName="description">
+      </textarea>
+        <!-- Error Message -->
+        <div class="error"
+          *ngIf="recipeForm.controls.description.errors?.required && (recipeForm.controls.description.touched || recipeForm.controls.description.dirty)">
+          This field is required
+        </div>
+        <div class="error"
+          *ngIf="recipeForm.controls.description.errors?.minlength && (recipeForm.controls.description.touched || recipeForm.controls.description.dirty)">
+          Name must be at least 20 characters long.
+        </div>
+        <!-- Error Message -->
+      </div>
+    </div>
+  </div>
+  <div formArrayName="ingredients">
+    <div class="row" *ngFor="let control of recipeForm.controls?.ingredients.controls;let i = index;"
+      [formGroup]="control">
+      <div class="col-md-7">
+        <div class="form-group">
+          <input type="text" class="form-control" id="name" name="name" formControlName="name">
+          <!-- Error Message -->
+          <div class="error"
+            *ngIf="control.controls.name.errors?.required && (control.controls.name.touched || control.controls.name.dirty)">
+            This field is required
+          </div>
+          <div class="error"
+            *ngIf="control.controls.name.errors?.minlength && (control.controls.name.touched || control.controls.name.dirty)">
+            Name must be at least 3 characters long.
+          </div>
+          <div class="error"
+            *ngIf="control.controls.name.errors?.pattern && (control.controls.name.touched || control.controls.name.dirty)">
+            Only letters are allowed.
+          </div>
+          <!-- Error Message -->
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <input type="number" class="form-control" id="amount" name="amount" formControlName="amount">
+          <!-- Error Message -->
+          <div class="error"
+            *ngIf="control.controls.amount.errors?.required && (control.controls.amount.touched || control.controls.amount.dirty)">
+            This field is required
+          </div>
+          <div class="error"
+            *ngIf="control.controls.amount.errors?.pattern && (control.controls.amount.touched || control.controls.amount.dirty)">
+            Only positive numbers are allowed except 0.
+          </div>
+          <!-- Error Message -->
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-danger" (click)="removeIngredients(i)">
+          X
+        </button>
+      </div>
+    </div>
+    <button type="button" class="btn btn-success" (click)="addIngredients()">
+      Add Ingradient+
+    </button>
+  </div>
+</form>
